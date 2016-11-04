@@ -117,28 +117,28 @@ ADD ./elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 ### configure Logstash
 
 # certs/keys for Beats and Lumberjack input
-RUN mkdir -p /etc/pki/tls/certs && mkdir /etc/pki/tls/private
-ADD ./logstash-beats.crt /etc/pki/tls/certs/logstash-beats.crt
-ADD ./logstash-beats.key /etc/pki/tls/private/logstash-beats.key
+#RUN mkdir -p /etc/pki/tls/certs && mkdir /etc/pki/tls/private
+#ADD ./logstash-beats.crt /etc/pki/tls/certs/logstash-beats.crt
+#ADD ./logstash-beats.key /etc/pki/tls/private/logstash-beats.key
 
 # filters
-ADD ./02-beats-input.conf /etc/logstash/conf.d/02-beats-input.conf
-ADD ./10-syslog.conf /etc/logstash/conf.d/10-syslog.conf
-ADD ./11-nginx.conf /etc/logstash/conf.d/11-nginx.conf
-ADD ./30-output.conf /etc/logstash/conf.d/30-output.conf
+#ADD ./02-beats-input.conf /etc/logstash/conf.d/02-beats-input.conf
+#ADD ./10-syslog.conf /etc/logstash/conf.d/10-syslog.conf
+#ADD ./11-nginx.conf /etc/logstash/conf.d/11-nginx.conf
+#ADD ./30-output.conf /etc/logstash/conf.d/30-output.conf
 
 # patterns
-ADD ./nginx.pattern ${LOGSTASH_HOME}/patterns/nginx
-RUN chown -R logstash:logstash ${LOGSTASH_HOME}/patterns
+#ADD ./nginx.pattern ${LOGSTASH_HOME}/patterns/nginx
+#RUN chown -R logstash:logstash ${LOGSTASH_HOME}/patterns
 
 
 ### configure logrotate
 
 ADD ./elasticsearch-logrotate /etc/logrotate.d/elasticsearch
-ADD ./logstash-logrotate /etc/logrotate.d/logstash
+#ADD ./logstash-logrotate /etc/logrotate.d/logstash
 ADD ./kibana-logrotate /etc/logrotate.d/kibana
 RUN chmod 644 /etc/logrotate.d/elasticsearch \
- && chmod 644 /etc/logrotate.d/logstash \
+ #&& chmod 644 /etc/logrotate.d/logstash \
  && chmod 644 /etc/logrotate.d/kibana
 
 
