@@ -52,6 +52,7 @@ RUN groupadd -r elasticsearch -g ${ES_GID} \
  && apt-get install -qqy \
 		elasticsearch=${ES_VERSION} \
 		openjdk-8-jdk \
+            gzip \
  && apt-get clean
 
  RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch x-pack
