@@ -66,17 +66,17 @@ RUN groupadd -r elasticsearch -g ${ES_GID} \
 #ENV LOGSTASH_UID 992
 
 #RUN mkdir ${LOGSTASH_HOME} \
- && curl -O https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_PACKAGE} \
- && tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
- && rm -f ${LOGSTASH_PACKAGE} \
- && groupadd -r logstash -g ${LOGSTASH_GID} \
- && useradd -r -s /usr/sbin/nologin -d ${LOGSTASH_HOME} -c "Logstash service user" -u ${LOGSTASH_UID} -g logstash logstash \
- && mkdir -p /var/log/logstash /etc/logstash/conf.d \
- && chown -R logstash:logstash ${LOGSTASH_HOME} /var/log/logstash
+ #&& curl -O https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_PACKAGE} \
+ #&& tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
+ #&& rm -f ${LOGSTASH_PACKAGE} \
+ #&& groupadd -r logstash -g ${LOGSTASH_GID} \
+ #&& useradd -r -s /usr/sbin/nologin -d ${LOGSTASH_HOME} -c "Logstash service user" -u ${LOGSTASH_UID} -g logstash logstash \
+ #&& mkdir -p /var/log/logstash /etc/logstash/conf.d \
+ #&& chown -R logstash:logstash ${LOGSTASH_HOME} /var/log/logstash
 
 #ADD ./logstash-init /etc/init.d/logstash
 #RUN sed -i -e 's#^LS_HOME=$#LS_HOME='$LOGSTASH_HOME'#' /etc/init.d/logstash \
- && chmod +x /etc/init.d/logstash
+ #&& chmod +x /etc/init.d/logstash
 
 
 ### install Kibana
