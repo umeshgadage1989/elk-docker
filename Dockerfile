@@ -54,16 +54,18 @@ RUN groupadd -r elasticsearch -g ${ES_GID} \
 		openjdk-8-jdk \
  && apt-get clean
 
+ RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install -y x-pack
+
 
 ### install Logstash
 
-ENV LOGSTASH_VERSION 5.0.0
-ENV LOGSTASH_HOME /opt/logstash
-ENV LOGSTASH_PACKAGE logstash-${LOGSTASH_VERSION}.tar.gz
-ENV LOGSTASH_GID 992
-ENV LOGSTASH_UID 992
+#ENV LOGSTASH_VERSION 5.0.0
+#ENV LOGSTASH_HOME /opt/logstash
+#ENV LOGSTASH_PACKAGE logstash-${LOGSTASH_VERSION}.tar.gz
+#ENV LOGSTASH_GID 992
+#ENV LOGSTASH_UID 992
 
-RUN mkdir ${LOGSTASH_HOME} \
+#RUN mkdir ${LOGSTASH_HOME} \
  && curl -O https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_PACKAGE} \
  && tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
  && rm -f ${LOGSTASH_PACKAGE} \
@@ -72,8 +74,8 @@ RUN mkdir ${LOGSTASH_HOME} \
  && mkdir -p /var/log/logstash /etc/logstash/conf.d \
  && chown -R logstash:logstash ${LOGSTASH_HOME} /var/log/logstash
 
-ADD ./logstash-init /etc/init.d/logstash
-RUN sed -i -e 's#^LS_HOME=$#LS_HOME='$LOGSTASH_HOME'#' /etc/init.d/logstash \
+#ADD ./logstash-init /etc/init.d/logstash
+#RUN sed -i -e 's#^LS_HOME=$#LS_HOME='$LOGSTASH_HOME'#' /etc/init.d/logstash \
  && chmod +x /etc/init.d/logstash
 
 
@@ -99,6 +101,8 @@ ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
 RUN sed -i -e 's#^KIBANA_HOME=$#KIBANA_HOME='$KIBANA_HOME'#' /etc/init.d/kibana \
  && chmod +x /etc/init.d/kibana
+
+ RUN /opt/kibana/bin/kibana-plugin install x-pack
 
 
 ###############################################################################
