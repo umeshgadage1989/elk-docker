@@ -54,7 +54,7 @@ RUN groupadd -r elasticsearch -g ${ES_GID} \
 		openjdk-8-jdk \
  && apt-get clean
 
- RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install -y x-pack
+ RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch x-pack
 
 
 ### install Logstash
