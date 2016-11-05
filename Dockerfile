@@ -52,7 +52,6 @@ RUN groupadd -r elasticsearch -g ${ES_GID} \
  && apt-get install -qqy \
 		elasticsearch=${ES_VERSION} \
 		openjdk-8-jdk \
-            gzip \
  && apt-get clean
 
  RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch x-pack
@@ -104,11 +103,6 @@ RUN sed -i -e 's#^KIBANA_HOME=$#KIBANA_HOME='$KIBANA_HOME'#' /etc/init.d/kibana 
  && chmod +x /etc/init.d/kibana
 
  RUN /opt/kibana/bin/kibana-plugin install x-pack
-
-
- ENV KOPF_VERSION 2.0.1
- RUN curl -s -L "https://github.com/lmenezes/elasticsearch-kopf/archive/v${KOPF_VERSION}.tar.gz" | \
-    tar xz -C /tmp && mv "/tmp/elasticsearch-kopf-${KOPF_VERSION}" /kopf
 
 ###############################################################################
 #                               CONFIGURATION
