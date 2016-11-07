@@ -16,7 +16,7 @@
 _term() {
   echo "Terminating ELK"
   service elasticsearch stop
-  service logstash stop
+  #service logstash stop
   service kibana stop
   exit 0
 }
@@ -33,8 +33,10 @@ service cron start
 #   but if it's good enough for Fedora (https://goo.gl/88eyXJ), it's good
 #   enough for me :)
 
-rm -f /var/run/elasticsearch/elasticsearch.pid /var/run/logstash.pid \
+#rm -f /var/run/elasticsearch/elasticsearch.pid /var/run/logstash.pid \
   /var/run/kibana5.pid
+
+rm -f /var/run/elasticsearch/elasticsearch.pid /var/run/kibana5.pid
 
 ## initialise list of log files to stream in console (initially empty)
 OUTPUT_LOGFILES=""
@@ -96,27 +98,27 @@ else
 fi
 
 # Logstash
-if [ -z "$LOGSTASH_START" ]; then
-  LOGSTASH_START=1
-fi
-if [ "$LOGSTASH_START" -ne "1" ]; then
-  echo "LOGSTASH_START is set to something different from 1, not starting..."
-else
-  # override LS_HEAP_SIZE variable if set
-  if [ ! -z "$LS_HEAP_SIZE" ]; then
-    awk -v LINE="LS_HEAP_SIZE=\"$LS_HEAP_SIZE\"" '{ sub(/^LS_HEAP_SIZE=.*/, LINE); print; }' /etc/init.d/logstash \
-        > /etc/init.d/logstash.new && mv /etc/init.d/logstash.new /etc/init.d/logstash && chmod +x /etc/init.d/logstash
-  fi
+# if [ -z "$LOGSTASH_START" ]; then
+  # LOGSTASH_START=1
+# fi
+# if [ "$LOGSTASH_START" -ne "1" ]; then
+#   echo "LOGSTASH_START is set to something different from 1, not starting..."
+# else
+#   # override LS_HEAP_SIZE variable if set
+#   if [ ! -z "$LS_HEAP_SIZE" ]; then
+#     awk -v LINE="LS_HEAP_SIZE=\"$LS_HEAP_SIZE\"" '{ sub(/^LS_HEAP_SIZE=.*/, LINE); print; }' /etc/init.d/logstash \
+#         > /etc/init.d/logstash.new && mv /etc/init.d/logstash.new /etc/init.d/logstash && chmod +x /etc/init.d/logstash
+#   fi
 
-  # override LS_OPTS variable if set
-  if [ ! -z "$LS_OPTS" ]; then
-    awk -v LINE="LS_OPTS=\"$LS_OPTS\"" '{ sub(/^LS_OPTS=.*/, LINE); print; }' /etc/init.d/logstash \
-        > /etc/init.d/logstash.new && mv /etc/init.d/logstash.new /etc/init.d/logstash && chmod +x /etc/init.d/logstash
-  fi
+#   # override LS_OPTS variable if set
+#   if [ ! -z "$LS_OPTS" ]; then
+#     awk -v LINE="LS_OPTS=\"$LS_OPTS\"" '{ sub(/^LS_OPTS=.*/, LINE); print; }' /etc/init.d/logstash \
+#         > /etc/init.d/logstash.new && mv /etc/init.d/logstash.new /etc/init.d/logstash && chmod +x /etc/init.d/logstash
+#   fi
 
-  service logstash start
-  OUTPUT_LOGFILES+="/var/log/logstash/logstash.log "
-fi
+#   service logstash start
+#   OUTPUT_LOGFILES+="/var/log/logstash/logstash.log "
+# fi
 
 # Kibana
 if [ -z "$KIBANA_START" ]; then
@@ -130,7 +132,13 @@ else
 fi
 
 # Exit if nothing has been started
-if [ "$ELASTICSEARCH_START" -ne "1" ] && [ "$LOGSTASH_START" -ne "1" ] \
+# if [ "$ELASTICSEARCH_START" -ne "1" ] && [ "$LOGSTASH_START" -ne "1" ] \
+#   && [ "$KIBANA_START" -ne "1" ]; then
+#   >&2 echo "No services started. Exiting."
+#   exit 1
+# fi
+
+if [ "$ELASTICSEARCH_START" -ne "1" ] \
   && [ "$KIBANA_START" -ne "1" ]; then
   >&2 echo "No services started. Exiting."
   exit 1
